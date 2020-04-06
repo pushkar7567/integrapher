@@ -150,6 +150,14 @@ void process_line() {
     tft.setCursor(210,20);
     tft.println(buffer);
   }  
+
+  if ((buffer[0] == "P")) {
+    tft.setTextColor(WHITE);
+    tft.setFont(&FreeSerifBoldItalic9pt7b);
+    tft.setTextSize(1);
+    tft.setCursor(50,50);
+    tft.println(buffer);
+  }
   // clear the buffer
   buf_len = 0;
   buffer[buf_len] = 0;  
@@ -174,6 +182,14 @@ void graphDisplay(){
     tft.setTextSize(2);
     tft.setTextColor(BLACK);
     tft.print("QUIT");
+    tft.drawLine(170,0,170,320, WHITE);
+    tft.drawLine(0,160,350, 160, WHITE);
+    tft.setCursor(325, 175);
+    tft.setTextColor(RED);
+    tft.setTextSize(1);
+    tft.print(sUpperlimit);
+    tft.setCursor(2, 175);
+    tft.print(sLowerlimit);
     tft.setFont(&FreeSansBold9pt7b);
     TSPoint touch = ts.getPoint();
     pinMode(YP,OUTPUT);
@@ -181,10 +197,10 @@ void graphDisplay(){
 
     while (true){
         char in_line;
-
         if (Serial.available()) {
           // read the incoming byte:
           char in_char = Serial.read();
+
           if (in_char == '\n' || in_char == '\r') {
             process_line();
           }  
@@ -205,8 +221,7 @@ void graphDisplay(){
             int16_t point_y = map(touch.x, TS_MAXY, TS_MINY,0,tft.height());
             // If you press the QUIT button you go to the title screen
             if (point_x > 10 && point_x <120 && point_y >90 && point_y < 150){
-                mainMenu();
-                break;
+                mainMenu();                
             }
         }       
     }

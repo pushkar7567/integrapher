@@ -32,8 +32,64 @@ void lin_function()
    calculated_area = area1;
 }
 
+template <typename T>
+void graph_evaluator()
+{
+   typedef exprtk::symbol_table<T> symbol_table_t;
+   typedef exprtk::expression<T>     expression_t;
+   typedef exprtk::parser<T>             parser_t;
+   T x;
 
+   symbol_table_t symbol_table;
+   symbol_table.add_variable("x",x);
+   symbol_table.add_constants();
 
+   expression_t expression;
+   expression.register_symbol_table(symbol_table);
+
+   parser_t parser;
+   parser.compile(equation_str,expression);
+
+   ofstream myfile;
+   myfile.open("graph_points.txt", ios::trunc);
+
+   if (myfile.is_open())
+   { 
+      for (x = T(lowerlimit); x <= T(upperlimit); x += T(0.001))
+      {
+        T y = expression.value();
+        myfile << x << "," << y << endl;
+      }  
+      myfile << "endfile";
+      myfile.close(); 
+   }
+   else cout << "Unable to open file";
+}
+
+/*
+string graph_builder() {
+  ifstream myfile;
+  myfile.open("graph_points.txt", ios::out);
+  //double x, y;
+
+  string line;
+  //while(myfile) {
+    getline(myfile, line);
+    myfile.close();
+    return line;
+
+    //assert(Serial.writeline(line+"\n"));
+    //if (line != "endfile"){
+      //counter++;
+      //int pos = line.find(",");
+      //string x_str = line.substr(0, pos);
+      //string y_str = line.substr(pos+1, line.size()-pos);
+      //x = stod(x_str); y = stod(y_str);
+      //cout << x_str << " " << y_str << endl;
+    //}  
+  //}
+}
+*/
 
 int main() {
   SerialPort Serial("/dev/ttyACM0");
@@ -71,14 +127,13 @@ int main() {
   cout << "Waiting for client to reply to previous message..." << endl;
 
   line = Serial.readline(); // This reads lcd image shit
+  int flag =0;
 
-
-  while (true){
+  while (flag == 0){
     int pos;
-    //bool equation_rev = false, lower_rev = false, upper_rev = false;
     line = Serial.readline();
     cout << "Received: " << line;
-
+    //int flag =0;
 
     if (line.find("Equation:") != std::string::npos) {
       equation_str = line;
@@ -93,6 +148,8 @@ int main() {
       pos = lowerL_str.find(":");
       lowerL_str = lowerL_str.substr(pos+2, lowerL_str.size()-pos-1);
       lowerlimit = stod(lowerL_str);
+      graph_evaluator<double>();
+      flag = 1;
     }
 
     if (line.find("UpperL:") != std::string::npos) {
@@ -105,9 +162,16 @@ int main() {
       cout << "Area: " << calculated_area << endl;
       string area_str = to_string(calculated_area); 
       assert(Serial.writeline("Area: "+area_str+"\n"));
-    }
-
+    }    
   };
+
+  ifstream myfile;
+  myfile.open("graph_points.txt", ios::out);      
+  while(myfile) {
+    getline(myfile, line);
+    assert(Serial.writeline("P "+line+"\n"));
+  }
+  myfile.close();
 
 	return 0;
 }

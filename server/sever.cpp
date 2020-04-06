@@ -83,7 +83,7 @@ void graph_builder() {
         max = y;
       }
       else if (y<min) {
-        min = y;l
+        min = y;
       }
     }  
   }
@@ -97,7 +97,7 @@ int main() {
   cin >> lowerlimit >> upperlimit;
   //lin_function<double>();
   graph_evaluator<double>();
-  graph_builder();
+  //graph_builder();
 
   return 0;
 }
