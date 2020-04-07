@@ -59,8 +59,8 @@ void graph_evaluator()
       for (x = T(lowerlimit); x <= T(upperlimit); x += T(0.001))
       {
         T y = expression.value();
-        myfile << x << "," << y << endl;
-        assert(Serial.writeline("P "+to_string(x)+" "+to_string(y)));
+        myfile << (x*1000) << " " << (y*1000) << endl;
+        assert(Serial.writeline("ig "+to_string(x)+ " "+ to_string(y)));
         assert(Serial.writeline("\n"));
       }  
       myfile << "endfile";
@@ -97,8 +97,6 @@ int main() {
     line = Serial.readline();
     cout << "Received: " << line; // note '\n' is in the string already
   } while (line != nextPhase);
-  cout << "Sending message <Ack\\n>" << endl;
-  //assert(Serial.writeline("Ack"));
 
   // switch to next phase
   curPhase = nextPhase;
@@ -106,8 +104,7 @@ int main() {
   cout << "Server is in phase " << curPhase;
   cout << "Waiting for client to reply to previous message..." << endl;
 
-  line = Serial.readline(); // This reads lcd image shit
-  //int flag =0;
+  line = Serial.readline(); 
 
   while (true){
     int pos;
@@ -115,7 +112,6 @@ int main() {
     cout << "Received: " << line;
     string rec;
     string currser;
-    //int flag =0;
 
     if (line.find("Equation:") != std::string::npos) {
       equation_str = line;
@@ -132,7 +128,6 @@ int main() {
       lowerlimit = stod(lowerL_str);
       graph_evaluator<double>();
       Serial.readline();
-      //Serial.readline();
       rec = Serial.readline();
       if(rec == "Ack\n") {
       	cout << "Sending points now..." << endl;
@@ -141,10 +136,8 @@ int main() {
   		while(myfile) {
     		getline(myfile, line);
     		currser = Serial.readline();
-    		//cout << currser << endl;
     		if (currser == "Ack\n") {
     			assert(Serial.writeline("P "+line+"\n"));
-
     		}
   		}
   		myfile.close();

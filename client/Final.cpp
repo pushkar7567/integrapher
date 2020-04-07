@@ -99,6 +99,8 @@ void setup() {
     // set up buffer as empty string
     buf_len = 0;
     buffer[buf_len] = 0;
+
+    int32_t max_pt=-1000000, min_pt=1000000;
 }
 
 /* * * * * * * * * * *  * * * * * * * * * * * * * * * * *
@@ -137,6 +139,7 @@ It also does not return any parameters
 
 
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+
 void process_line() {
     // print what's in the buffer back to server
     Serial.println("Ack");
@@ -151,6 +154,14 @@ void process_line() {
 
     if ((buffer[0] == 'P')) {
         tft.println(buffer);
+        int32_t x_coor = (buffer.substring(0, buffer.indexOf(" "))).toInt();
+        int32_t y_coor = (buffer.substring(buffer.indexOf(" ")+1)).toInt();
+        if (y_coor>max_pt) {
+            max_pt = y_coor;
+        }
+        else if(y_coor<min_pt) {
+            min_pt = y_coor;
+        }
     }
     // clear the buffer
     buf_len = 0;
