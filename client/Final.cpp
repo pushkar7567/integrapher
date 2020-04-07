@@ -139,8 +139,7 @@ It also does not return any parameters
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
 void process_line() {
     // print what's in the buffer back to server
-    Serial.print("Got: ");
-    Serial.println(buffer);
+    Serial.println("Ack");
 
     if ((buffer[0] == 'A') && (buffer[1] == 'r')){
         tft.setTextColor(WHITE);
@@ -148,12 +147,11 @@ void process_line() {
         tft.setTextSize(1);
         tft.setCursor(210,20);
         tft.println(buffer);
-    }
+    } 
 
     if ((buffer[0] == 'P')) {
-        drawLine();
-    }  
-
+        tft.println(buffer);
+    }
     // clear the buffer
     buf_len = 0;
     buffer[buf_len] = 0;  

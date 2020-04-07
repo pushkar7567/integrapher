@@ -98,7 +98,7 @@ int main() {
     cout << "Received: " << line; // note '\n' is in the string already
   } while (line != nextPhase);
   cout << "Sending message <Ack\\n>" << endl;
-  assert(Serial.writeline("Ack\n"));
+  //assert(Serial.writeline("Ack"));
 
   // switch to next phase
   curPhase = nextPhase;
@@ -113,6 +113,8 @@ int main() {
     int pos;
     line = Serial.readline();
     cout << "Received: " << line;
+    string rec;
+    string currser;
     //int flag =0;
 
     if (line.find("Equation:") != std::string::npos) {
@@ -129,7 +131,25 @@ int main() {
       lowerL_str = lowerL_str.substr(pos+2, lowerL_str.size()-pos-1);
       lowerlimit = stod(lowerL_str);
       graph_evaluator<double>();
-      //flag = 1;
+      Serial.readline();
+      //Serial.readline();
+      rec = Serial.readline();
+      if(rec == "Ack\n") {
+      	cout << "Sending points now..." << endl;
+      	ifstream myfile;
+  		myfile.open("graph_points.txt", ios::out);      
+  		while(myfile) {
+    		getline(myfile, line);
+    		currser = Serial.readline();
+    		//cout << currser << endl;
+    		if (currser == "Ack\n") {
+    			assert(Serial.writeline("P "+line+"\n"));
+
+    		}
+  		}
+  		myfile.close();
+  		cout << "Points sent" << endl;
+      } 
     }
 
     if (line.find("UpperL:") != std::string::npos) {
@@ -139,19 +159,10 @@ int main() {
       upperL_str = upperL_str.substr(pos+2, upperL_str.size()-pos-1);
       upperlimit = stod(upperL_str);
       lin_function<double>();
-      cout << "Area: " << calculated_area << endl;
       string area_str = to_string(calculated_area); 
       assert(Serial.writeline("Area: "+area_str+"\n"));
     }    
   };
-
-  //ifstream myfile;
-  //myfile.open("graph_points.txt", ios::out);      
-  //while(myfile) {
-    //getline(myfile, line);
-    //assert(Serial.writeline("P "+line+"\n"));
-  //}
-  //myfile.close();
 
 	return 0;
 }
