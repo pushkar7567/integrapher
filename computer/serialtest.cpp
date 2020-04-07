@@ -35,6 +35,7 @@ void lin_function()
 template <typename T>
 void graph_evaluator()
 {
+   SerialPort Serial("/dev/ttyACM0");
    typedef exprtk::symbol_table<T> symbol_table_t;
    typedef exprtk::expression<T>     expression_t;
    typedef exprtk::parser<T>             parser_t;
@@ -59,6 +60,8 @@ void graph_evaluator()
       {
         T y = expression.value();
         myfile << x << "," << y << endl;
+        assert(Serial.writeline("P "+to_string(x)+" "+to_string(y)));
+        assert(Serial.writeline("\n"));
       }  
       myfile << "endfile";
       myfile.close(); 
@@ -66,30 +69,7 @@ void graph_evaluator()
    else cout << "Unable to open file";
 }
 
-/*
-string graph_builder() {
-  ifstream myfile;
-  myfile.open("graph_points.txt", ios::out);
-  //double x, y;
 
-  string line;
-  //while(myfile) {
-    getline(myfile, line);
-    myfile.close();
-    return line;
-
-    //assert(Serial.writeline(line+"\n"));
-    //if (line != "endfile"){
-      //counter++;
-      //int pos = line.find(",");
-      //string x_str = line.substr(0, pos);
-      //string y_str = line.substr(pos+1, line.size()-pos);
-      //x = stod(x_str); y = stod(y_str);
-      //cout << x_str << " " << y_str << endl;
-    //}  
-  //}
-}
-*/
 
 int main() {
   SerialPort Serial("/dev/ttyACM0");
@@ -127,9 +107,9 @@ int main() {
   cout << "Waiting for client to reply to previous message..." << endl;
 
   line = Serial.readline(); // This reads lcd image shit
-  int flag =0;
+  //int flag =0;
 
-  while (flag == 0){
+  while (true){
     int pos;
     line = Serial.readline();
     cout << "Received: " << line;
@@ -149,7 +129,7 @@ int main() {
       lowerL_str = lowerL_str.substr(pos+2, lowerL_str.size()-pos-1);
       lowerlimit = stod(lowerL_str);
       graph_evaluator<double>();
-      flag = 1;
+      //flag = 1;
     }
 
     if (line.find("UpperL:") != std::string::npos) {
@@ -165,13 +145,13 @@ int main() {
     }    
   };
 
-  ifstream myfile;
-  myfile.open("graph_points.txt", ios::out);      
-  while(myfile) {
-    getline(myfile, line);
-    assert(Serial.writeline("P "+line+"\n"));
-  }
-  myfile.close();
+  //ifstream myfile;
+  //myfile.open("graph_points.txt", ios::out);      
+  //while(myfile) {
+    //getline(myfile, line);
+    //assert(Serial.writeline("P "+line+"\n"));
+  //}
+  //myfile.close();
 
 	return 0;
 }

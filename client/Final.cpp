@@ -137,34 +137,27 @@ It also does not return any parameters
 
 
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
 void process_line() {
-  // print what's in the buffer back to server
-  Serial.print("Got: ");
-  Serial.println(buffer);
+    // print what's in the buffer back to server
+    Serial.print("Got: ");
+    Serial.println(buffer);
 
-  if ((buffer[0] == 'A') && (buffer[1] == 'r')){
-    tft.setTextColor(WHITE);
-    tft.setFont(&FreeSerifBoldItalic9pt7b);
-    tft.setTextSize(1);
-    tft.setCursor(210,20);
-    tft.println(buffer);
-  }  
+    if ((buffer[0] == 'A') && (buffer[1] == 'r')){
+        tft.setTextColor(WHITE);
+        tft.setFont(&FreeSerifBoldItalic9pt7b);
+        tft.setTextSize(1);
+        tft.setCursor(210,20);
+        tft.println(buffer);
+    }
 
-  if ((buffer[0] == "P")) {
-    tft.setTextColor(WHITE);
-    tft.setFont(&FreeSerifBoldItalic9pt7b);
-    tft.setTextSize(1);
-    tft.setCursor(50,50);
-    tft.println(buffer);
-  }
-  // clear the buffer
-  buf_len = 0;
-  buffer[buf_len] = 0;  
+    if ((buffer[0] == 'P')) {
+        drawLine();
+    }  
+
+    // clear the buffer
+    buf_len = 0;
+    buffer[buf_len] = 0;  
 }
-
-
-
 
 void graphDisplay(){
     tft.fillScreen(WHITE);
@@ -204,7 +197,7 @@ void graphDisplay(){
           if (in_char == '\n' || in_char == '\r') {
             process_line();
           }  
-
+          
           else {
               // add character to buffer, provided that we don't overflow.
               // drop any excess characters.
@@ -213,7 +206,7 @@ void graphDisplay(){
                   buf_len++;
                   buffer[buf_len] = 0;
               }
-            }
+          }
         }
               
         if(touch.z > MINPRESSURE && touch.z < MAXPRESSURE){
