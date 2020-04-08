@@ -72,10 +72,10 @@ enum {Main,Function,Limit,Graph} current;
 int current_state=Main;
 
 // Variables for communication
-const uint16_t buf_size = 256;
+const uint16_t buf_size = 1024;
 uint16_t buf_len = 0;
 char* buffer = (char *) malloc(buf_size);
-//double area1;
+int x_min, y_min, x_max, y_max;
 ///////////////////////////////////////////////// END OF GLOBAL VARIABLE DECLARATIONS ///////////////////////////////////////////////////////
 
 void setup() {
@@ -132,13 +132,37 @@ void mainMenu(){
 
 }
 
-/* * * * * * * * * * *  * * * * * * * * * * * * * * * * *
-graphDisplay function takes no parameters.
+void setMaxMin() {
+    String line = buffer;
+    line = line.substring(2);
+    x_min = (line.substring(0, line.indexOf(" "))).toInt();
+    line = line.substring(line.indexOf(" ")+1);
+    y_min = (line.substring(0, line.indexOf(" "))).toInt();
+    line = line.substring(line.indexOf(" ")+1);
+    x_max = (line.substring(0, line.indexOf(" "))).toInt();
+    y_max = line.substring(line.indexOf(" ")+1).toInt();
+    tft.println(x_max);
+    tft.println(y_max);
+}
 
-It also does not return any parameters
 
+void drawGraph() {
+    String line = buffer;
+    line = line.substring(2);
+    int x_pt = (line.substring(0, line.indexOf(" "))).toInt();
+    int y_pt = line.substring(line.indexOf(" ")+1).toInt();
+    
+    double y_length = y_max - y_min;
+    double x_length = x_max - x_min;
 
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+    double Yscaling_factor = (y_length/320);
+    double Xscaling_factor = (x_length/350);
+
+    double mapped_x = -((x_max - x_pt)/Xscaling_factor) + 350;
+    double mapped_y = ((y_min - y_pt)/Yscaling_factor) + 320;
+
+    tft.drawLine(mapped_x, 160, mapped_x, mapped_y, BLUE);
+}
 
 void process_line() {
     // print what's in the buffer back to server
@@ -153,19 +177,26 @@ void process_line() {
     } 
 
     if ((buffer[0] == 'P')) {
-        tft.println(buffer);
-        //int32_t x_coor = (buffer.substring(0, buffer.indexOf(" "))).toInt();
-        //int32_t y_coor = (buffer.substring(buffer.indexOf(" ")+1)).toInt();
+        drawGraph();
     }
 
     if (buffer[0] == 'M') {
-        tft.println(buffer);
+        //tft.println(buffer);
+        setMaxMin();
     }    
 
     // clear the buffer
     buf_len = 0;
     buffer[buf_len] = 0;  
 }
+
+/* * * * * * * * * * *  * * * * * * * * * * * * * * * * *
+graphDisplay function takes no parameters.
+
+It also does not return any parameters
+
+
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 void graphDisplay(){
     tft.fillScreen(WHITE);
