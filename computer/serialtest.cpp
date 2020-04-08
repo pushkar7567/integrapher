@@ -9,6 +9,7 @@ using namespace std;
 string equation_str, lowerL_str, upperL_str;
 double lowerlimit, upperlimit;
 double calculated_area;
+double max_y=-1000000, min_y=1000000, max_x, min_x;
 
 template <typename T>
 void lin_function()
@@ -59,12 +60,28 @@ void graph_evaluator()
       for (x = T(lowerlimit); x <= T(upperlimit); x += T(0.001))
       {
         T y = expression.value();
+
+        if (y<min_y) {
+    		min_y = y;
+    		min_x = x;
+    	}
+
+    	else if (y>max_y) {
+    		max_y = y;
+    		max_x = x;
+    	}
+
         myfile << (x*1000) << " " << (y*1000) << endl;
-        assert(Serial.writeline("ig "+to_string(x)+ " "+ to_string(y)));
-        assert(Serial.writeline("\n"));
+        
       }  
       myfile << "endfile";
       myfile.close(); 
+      int newx_min = min_x*1000, newy_min = min_y*1000, newx_max = max_x*1000, newy_max = max_y*1000;
+      assert(Serial.writeline("M "+ to_string(newx_min)+" "+to_string(newy_min)+" "+to_string(newx_max)+" "+to_string(newy_max)+"\n"));
+      for (int i=0; i<23; i++) {
+      	assert(Serial.writeline("ig "+to_string(x)+ " "+ to_string(x)));
+        assert(Serial.writeline("\n"));
+      }
    }
    else cout << "Unable to open file";
 }
@@ -128,6 +145,7 @@ int main() {
       lowerlimit = stod(lowerL_str);
       graph_evaluator<double>();
       Serial.readline();
+      
       rec = Serial.readline();
       if(rec == "Ack\n") {
       	cout << "Sending points now..." << endl;
