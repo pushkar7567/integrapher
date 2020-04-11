@@ -1,4 +1,4 @@
-# integrapher
+# The Integrapher
  Names: Amro Amanuddein and Pushkar Sabharwal
  ID's: 1572498 (Amro) 1588927 (Pushkar)
  CMPUT275, Winter 2020
