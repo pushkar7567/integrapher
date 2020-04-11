@@ -84,7 +84,7 @@ Then on the TFT Screen, the Main Menu screen will load.
 Notes/Remarks:
 ---------------
 
-- On every testing computers we had to allocate more memory to the VM, at least 4GB of RAM and 2 core-processor otherwise the computer kept freezing while compiling server, this is due to the extensiveness of the parsing software.
+- On every testing computers we had to allocate more memory to the VM, at least 4GB of RAM and 4 core-processor otherwise the computer kept freezing while compiling server, this is due to the extensiveness of the parsing software.
 - We couldnt implement the Zoom in and zoom out buttons in time.
 - We created the title screen and the integratipn symbol and converted it to .lcd file format but we could not get it to work in time.
 
