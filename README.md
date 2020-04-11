@@ -1,10 +1,10 @@
 # integrapher
-// Names: Amro Amanuddein and Pushkar Sabharwal
-// ID's: 1572498 (Amro) 1588927 (Pushkar)
-// CMPUT275, Winter 2020
-//
-// Final Project: The Integrapher
-//------------------------------------------------------
+ Names: Amro Amanuddein and Pushkar Sabharwal
+ ID's: 1572498 (Amro) 1588927 (Pushkar)
+ CMPUT275, Winter 2020
+
+ Final Project: The Integrapher
+------------------------------------------------------
 
 Description: The Integrapher, a combination of an integration and graphical software, allows the user to enter a mathematical function, then proceed to enter the lower and upper integral limit to be evaluated and the mathematical expression to be plotted. 
 
