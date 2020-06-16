@@ -1,18 +1,6 @@
 # The Integrapher
- Names: Amro Amanuddein and Pushkar Sabharwal
- ID's: 1572498 (Amro) 1588927 (Pushkar)
- CMPUT275, Winter 2020
-
- Final Project: The Integrapher
-------------------------------------------------------
 
 Description: The Integrapher, a combination of an integration and graphical software, allows the user to enter a mathematical function, then proceed to enter the lower and upper integral limit to be evaluated and the mathematical expression to be plotted. 
-
-Contributions:
--------------
-
-Amro: GUI, enumeration, communication, parser.
-Pushkar: GUI, enumeration, communication, parser.
 
 Files included in this submission are:
 --------------------------------------
@@ -108,12 +96,3 @@ User must enter brackets appropriately when entering functions and limits.
 Makefile Targets:
 -----------------
 "make clean" : removes the .o and executable files from the server directory.
-
-
-References:
-------------
-- lcd_image.h/.cpp files from EClass
-- bmp2lcd files (pyhton) for image conversion from bmp to lcd
-- Serial port communictions within C++ files
-- We used a mathematical parser we found as per Professor 	Omid's recommendation: Exprtk Mathematical expressions parser and integrating library
-- Major Assignment 2 Part 2
