@@ -1,8 +1,8 @@
 # The Integrapher
 
-Description: The Integrapher, a combination of an integration and graphical software, allows the user to enter a mathematical function, then proceed to enter the lower and upper integral limit to be evaluated and the mathematical expression to be plotted. 
+The Integrapher, a combination of an integration and graphical software, allows the user to enter a mathematical function, then proceed to enter the lower and upper integral limit to be evaluated and the mathematical expression to be plotted. 
 
-Files included in this submission are:
+Files included in the project are:
 --------------------------------------
 
 	client:
